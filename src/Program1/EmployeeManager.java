@@ -15,7 +15,7 @@ import java.util.Scanner;
 public class EmployeeManager {
 	
 	public static void main(String args[]) throws IOException {
-		switch (args[0].toLowerCase()) {
+		/*switch (args[0].toLowerCase()) {
 		case "add":
 			add();
 			break;
@@ -25,27 +25,91 @@ public class EmployeeManager {
 		case "mod":
 			mod(args[1]);
 			break;
-		}
+		}*/
+		mod("521");
 	}
 
 	//TO-DO
-	private static void mod(String id) throws FileNotFoundException {
-		File employeesFile = new File("employees.txt");
+	private static void mod(String id) throws IOException {
+		File employeesFile = new File("resources/employees.txt");
 		Scanner fileScanner = new Scanner(employeesFile);
-		Scanner inputScanner = new Scanner(System.in);
-		while (fileScanner.hasNextLine()) {
-		   String lineFromFile = fileScanner.nextLine();
-		   if(lineFromFile.contains(id)) { 
-			   System.out.println("What field to change: ");
-			   String field = inputScanner.nextLine();
-			   field.toLowerCase();
-			   System.out.println("What new value: ");
-			   String newValue = inputScanner.nextLine();
-			   
-		   }else{
-			   System.out.print("No employee with such ID found.");
-		   }
+		Scanner userInputScanner = new Scanner(System.in);
+		File tempFile = File.createTempFile("appleham", ".txt");
+		String fieldToChange = userInputScanner.nextLine();
+		fieldToChange = fieldToChange.toLowerCase();
+		int changeIdentifyingNum;
+		
+		//14 Fields for stuff
+		//Yeah.....completely gross, I know
+		if(fieldToChange == "id"){
+			changeIdentifyingNum = 0;
+		}else if(fieldToChange == "lastname"){
+			changeIdentifyingNum = 1;
+		}else if(fieldToChange == "firstname"){
+			changeIdentifyingNum = 2;
+		}else if(fieldToChange == "department"){
+			changeIdentifyingNum = 3;
+		}else if(fieldToChange == "title"){
+			changeIdentifyingNum = 4;
+		}else if(fieldToChange == "salary"){
+			changeIdentifyingNum = 5;
+		}else if(fieldToChange == "per"){
+			changeIdentifyingNum = 6;
+		}else if(fieldToChange == "commission"){
+			changeIdentifyingNum = 7;
+		}else if(fieldToChange == "taxid"){
+			changeIdentifyingNum = 8;
+		}else if(fieldToChange == "street"){
+			changeIdentifyingNum = 9;
+		}else if(fieldToChange == "city"){
+			changeIdentifyingNum = 10;
+		}else if(fieldToChange == "state"){
+			changeIdentifyingNum = 11;
+		}else if(fieldToChange == "zip"){
+			changeIdentifyingNum = 12;
+		}else if(fieldToChange == "country"){
+			changeIdentifyingNum = 13;
+		}else if(fieldToChange == "phone"){
+			changeIdentifyingNum = 14;
+		}else{
+			changeIdentifyingNum = 99;
 		}
+		
+		String newValue = "0";
+		PrintWriter p1 = new PrintWriter(tempFile);
+	//	tempFile.deleteOnExit();
+		p1.print(fileScanner.nextLine() + "\n");
+		while(fileScanner.hasNext()){
+			String idFromScanner = fileScanner.next();
+			if(idFromScanner.equals(id))
+			{
+				fileScanner.useDelimiter("\t");
+				int i = 0;
+				while(i<changeIdentifyingNum){
+					if((i ==0) && (changeIdentifyingNum != 0)){
+						p1.print(idFromScanner + "\t");
+					}
+					p1.print(fileScanner.next() + "\t");
+					i++;
+				}
+				fileScanner.next();
+				p1.print(newValue + "\t");
+				fileScanner.reset();
+				p1.print(fileScanner.nextLine() + "\n");
+				p1.close();
+				fileScanner.close();
+				userInputScanner.close();
+				return;
+			}
+			else
+			{
+				p1.print(idFromScanner);
+				p1.print(fileScanner.nextLine() + "\n");
+			}
+		}
+		p1.close();
+		fileScanner.close();
+		userInputScanner.close();
 	}
 
 	/**
