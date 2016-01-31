@@ -1,7 +1,6 @@
 package Program1;
 
 import java.io.*;
-import java.util.HashMap;
 import java.util.Scanner;
 
 /**
@@ -14,7 +13,7 @@ import java.util.Scanner;
 
 public class EmployeeManager {
 	
-	public static void main(String args[]) throws IOException {
+	public static void main(String args[]) throws Exception {
 		/*switch (args[0].toLowerCase()) {
 		case "add":
 			add();
@@ -26,88 +25,96 @@ public class EmployeeManager {
 			mod(args[1]);
 			break;
 		}*/
-		mod("521");
+		mod("1233");
 	}
 
 	//TO-DO
-	private static void mod(String id) throws IOException {
+	private static void mod(String id) throws Exception {
 		File employeesFile = new File("resources/employees.txt");
 		Scanner fileScanner = new Scanner(employeesFile);
 		Scanner userInputScanner = new Scanner(System.in);
+		
+		//Makes a temp file to save everything to, also asks for field to be changed
 		File tempFile = File.createTempFile("appleham", ".txt");
+		System.out.print("Enter field to change:  ");
 		String fieldToChange = userInputScanner.nextLine();
+		System.out.println("");
 		fieldToChange = fieldToChange.toLowerCase();
 		int changeIdentifyingNum;
 		
 		//14 Fields for stuff
 		//Yeah.....completely gross, I know
-		if(fieldToChange == "id"){
+		if(fieldToChange.equals("id")){
 			changeIdentifyingNum = 0;
-		}else if(fieldToChange == "lastname"){
+		}else if(fieldToChange.equals("lastname")){
 			changeIdentifyingNum = 1;
-		}else if(fieldToChange == "firstname"){
+		}else if(fieldToChange.equals("firstname")){
 			changeIdentifyingNum = 2;
-		}else if(fieldToChange == "department"){
+		}else if(fieldToChange.equals("department")){
 			changeIdentifyingNum = 3;
-		}else if(fieldToChange == "title"){
+		}else if(fieldToChange.equals("title")){
 			changeIdentifyingNum = 4;
-		}else if(fieldToChange == "salary"){
+		}else if(fieldToChange.equals("salary")){
 			changeIdentifyingNum = 5;
-		}else if(fieldToChange == "per"){
+		}else if(fieldToChange.equals("per")){
 			changeIdentifyingNum = 6;
-		}else if(fieldToChange == "commission"){
+		}else if(fieldToChange.equals("commission")){
 			changeIdentifyingNum = 7;
-		}else if(fieldToChange == "taxid"){
+		}else if(fieldToChange.equals("taxid")){
 			changeIdentifyingNum = 8;
-		}else if(fieldToChange == "street"){
+		}else if(fieldToChange.equals("street")){
 			changeIdentifyingNum = 9;
-		}else if(fieldToChange == "city"){
+		}else if(fieldToChange.equals("city")){
 			changeIdentifyingNum = 10;
-		}else if(fieldToChange == "state"){
+		}else if(fieldToChange.equals("state")){
 			changeIdentifyingNum = 11;
-		}else if(fieldToChange == "zip"){
+		}else if(fieldToChange.equals("zip")){
 			changeIdentifyingNum = 12;
-		}else if(fieldToChange == "country"){
+		}else if(fieldToChange.equals("country")){
 			changeIdentifyingNum = 13;
-		}else if(fieldToChange == "phone"){
+		}else if(fieldToChange.equals("phone")){
 			changeIdentifyingNum = 14;
 		}else{
-			changeIdentifyingNum = 99;
+			fileScanner.close();
+			userInputScanner.close();
+			throw new Exception(fieldToChange +  " is not a valid edit type!");
 		}
 		
-		String newValue = "0";
-		PrintWriter p1 = new PrintWriter(tempFile);
-	//	tempFile.deleteOnExit();
-		p1.print(fileScanner.nextLine() + "\n");
+		String newValue = null;
+		System.out.print("Enter new value:  ");
+		newValue = userInputScanner.nextLine();
+		System.out.println("");
+		PrintWriter filePrinter = new PrintWriter(tempFile);
+		tempFile.deleteOnExit();
+		filePrinter.print(fileScanner.nextLine() + "\n");
 		while(fileScanner.hasNext()){
 			String idFromScanner = fileScanner.next();
 			if(idFromScanner.equals(id))
 			{
 				fileScanner.useDelimiter("\t");
 				int i = 0;
-				while(i<changeIdentifyingNum){
+				while(i<changeIdentifyingNum-1){
 					if((i ==0) && (changeIdentifyingNum != 0)){
-						p1.print(idFromScanner + "\t");
+						filePrinter.print(idFromScanner + "\t");
 					}
-					p1.print(fileScanner.next() + "\t");
+					fileScanner.next();
+					filePrinter.print(fileScanner.next() + "\t");
 					i++;
 				}
-				fileScanner.next();
-				p1.print(newValue + "\t");
+				filePrinter.print(newValue + "\t");
 				fileScanner.reset();
-				p1.print(fileScanner.nextLine() + "\n");
-				p1.close();
-				fileScanner.close();
-				userInputScanner.close();
-				return;
+				filePrinter.print(fileScanner.nextLine() + "\n");
 			}
 			else
 			{
-				p1.print(idFromScanner);
-				p1.print(fileScanner.nextLine() + "\n");
+				filePrinter.print(idFromScanner);
+				filePrinter.print(fileScanner.nextLine() + "\n");
 			}
 		}
-		p1.close();
+		//Rename to employees.txt and then delete the old file
+		tempFile.renameTo(employeesFile);
+		
+		filePrinter.close();
 		fileScanner.close();
 		userInputScanner.close();
 	}
@@ -134,6 +141,7 @@ public class EmployeeManager {
 			   out.print("\n");
 		   }
 		}
+		fileScanner.close();
 		tempEmployeesFile.renameTo(employeesFile);
 	}
 
@@ -229,6 +237,7 @@ public class EmployeeManager {
 		Employee em = new Employee(id, firstName, lastName, department, title,
 				salary, per, commission, taxID, street, city, state, zip,
 				country, phone);
+		scanner.close();
 		return em;
 	}
 }
