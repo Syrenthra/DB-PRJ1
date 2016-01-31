@@ -1,6 +1,7 @@
 package Program1;
 
 import java.io.*;
+import java.util.HashMap;
 import java.util.Scanner;
 
 /**
@@ -12,32 +13,71 @@ import java.util.Scanner;
  */
 
 public class EmployeeManager {
-	public static void main(String args[]) {
+	
+	public static void main(String args[]) throws IOException {
 		switch (args[0].toLowerCase()) {
 		case "add":
 			add();
 			break;
 		case "del":
-			del();
+			del(args[1]);
 			break;
 		case "mod":
-			mod();
+			mod(args[1]);
 			break;
 		}
 	}
 
-	private static void mod() {
-		// TODO Auto-generated method stub
+	//TO-DO
+	private static void mod(String id) throws FileNotFoundException {
+		File employeesFile = new File("employees.txt");
+		Scanner fileScanner = new Scanner(employeesFile);
+		Scanner inputScanner = new Scanner(System.in);
+		while (fileScanner.hasNextLine()) {
+		   String lineFromFile = fileScanner.nextLine();
+		   if(lineFromFile.contains(id)) { 
+			   System.out.println("What field to change: ");
+			   String field = inputScanner.nextLine();
+			   field.toLowerCase();
+			   System.out.println("What new value: ");
+			   String newValue = inputScanner.nextLine();
+			   
+		   }else{
+			   System.out.print("No employee with such ID found.");
+		   }
+		}
 	}
 
-	private static void del() {
-		// TODO Auto-generated method stub
+	/**
+	 * Deletes an employee from the file given an id.
+	 * @param id of employee to delete
+	 * @throws IOException
+	 */
+	private static void del(String id) throws IOException {
+		File employeesFile = new File("employees.txt");
+		File tempEmployeesFile = new File("temp.txt");
+		Scanner fileScanner = new Scanner(employeesFile);
+		while (fileScanner.hasNextLine()) {
+		   String lineFromFile = fileScanner.nextLine();
+		   String[] delims = lineFromFile.split("	");
+		   String idInFile = delims[0];
+		   if(idInFile.contains(id)) { 
+			   continue;
+		   }
+		   try (PrintWriter out = new PrintWriter(new BufferedWriter(
+					new FileWriter(tempEmployeesFile, true)))) {
+			   out.print(lineFromFile);
+			   out.print("\n");
+		   }
+		}
+		tempEmployeesFile.renameTo(employeesFile);
 	}
 
 	/**
 	 * Create and adds new employee to system.
+	 * @throws IOException 
 	 */
-	public static void add() {
+	public static void add() throws IOException {
 		// INPUT EMPLOYEE INFO
 		Employee newEmployee = createNewEmployee();
 
@@ -74,15 +114,14 @@ public class EmployeeManager {
 			out.print(newEmployee.getCountry());
 			out.print("\t");
 			out.print(newEmployee.getPhone());
-		} catch (IOException e) {
-			// exception handling left as an exercise for the reader
+			out.close();
 		}
 	}
 
 	/**
-	 * Input employee info to command line 
-	 * then create a new employee object
+	 * Input employee info to command line then create a new employee object
 	 * that can be read into the employees.txt file
+	 * 
 	 * @return Employee em
 	 */
 	private static Employee createNewEmployee() {
