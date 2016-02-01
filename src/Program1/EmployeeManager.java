@@ -25,11 +25,11 @@ public class EmployeeManager {
 			mod(args[1]);
 			break;
 		}*/
-		mod("1233");
+		mod(1233);
 	}
 
 	//TO-DO
-	private static void mod(String id) throws Exception {
+	private static void mod(int id) throws Exception {
 		File employeesFile = new File("resources/employees.txt");
 		Scanner fileScanner = new Scanner(employeesFile);
 		Scanner userInputScanner = new Scanner(System.in);
@@ -41,6 +41,8 @@ public class EmployeeManager {
 		System.out.println("");
 		fieldToChange = fieldToChange.toLowerCase();
 		int changeIdentifyingNum;
+		
+		final int NUM_TOTAL_FIELDS = 14;
 		
 		//14 Fields for stuff
 		//Yeah.....completely gross, I know
@@ -85,34 +87,52 @@ public class EmployeeManager {
 		newValue = userInputScanner.nextLine();
 		System.out.println("");
 		PrintWriter filePrinter = new PrintWriter(tempFile);
-		tempFile.deleteOnExit();
+		//tempFile.deleteOnExit();
 		filePrinter.print(fileScanner.nextLine() + "\n");
+		
+		
+		
+		
+		
+		/**
+		 * Make sure that we change all types of all params to Employee to Strings instead of different types
+		 */
 		while(fileScanner.hasNext()){
-			String idFromScanner = fileScanner.next();
-			if(idFromScanner.equals(id))
-			{
-				fileScanner.useDelimiter("\t");
-				int i = 0;
-				while(i<changeIdentifyingNum-1){
-					if((i ==0) && (changeIdentifyingNum != 0)){
-						filePrinter.print(idFromScanner + "\t");
-					}
-					fileScanner.next();
-					filePrinter.print(fileScanner.next() + "\t");
-					i++;
-				}
-				filePrinter.print(newValue + "\t");
-				fileScanner.reset();
-				filePrinter.print(fileScanner.nextLine() + "\n");
+			String currentLine  = fileScanner.nextLine();
+			Scanner currentLineScanner = new Scanner(currentLine);
+			int currentID, taxid;
+			String lastName, firstName, department, title, per, street, city, state, country, phone, zip, commission;
+			double salary;
+			currentLineScanner.useDelimiter("\t");
+			currentID = currentLineScanner.nextInt();
+			lastName = currentLineScanner.next();
+			firstName = currentLineScanner.next();
+			department = currentLineScanner.next();
+			title = currentLineScanner.next();
+			salary = currentLineScanner.nextDouble();
+			per = currentLineScanner.next();
+			commission = currentLineScanner.next();
+			taxid = currentLineScanner.nextInt();
+			street = currentLineScanner.next();
+			city = currentLineScanner.next();
+			state = currentLineScanner.next();
+			zip = currentLineScanner.next();
+			country = currentLineScanner.next();
+			phone = currentLineScanner.next();
+			
+			System.out.println(currentID + ":" + lastName + ":" + firstName + ":" + department + ":" + title
+					+ ":" + salary + ":" + per + ":" + commission + ":" + taxid + ":" + street + ":" + city
+					+ ":" + state + ":" + zip + ":" + country + ":" + phone);
+			
+			if(currentID != id){
+				filePrinter.print(currentID + "\t" + lastName + "\t" + firstName + "\t" + department + "\t" + title
+				+ "\t" + salary + "\t" + per + "\t" + commission + "\t" + taxid + "\t" + street + "\t" + city
+				+ "\t" + state + "\t" + zip + "\t" + country + "\t" + phone);
 			}
-			else
-			{
-				filePrinter.print(idFromScanner);
-				filePrinter.print(fileScanner.nextLine() + "\n");
+			
 			}
-		}
 		//Rename to employees.txt and then delete the old file
-		tempFile.renameTo(employeesFile);
+		//tempFile.renameTo(employeesFile);
 		
 		filePrinter.close();
 		fileScanner.close();
