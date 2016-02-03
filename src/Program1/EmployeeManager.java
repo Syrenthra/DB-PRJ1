@@ -14,25 +14,35 @@ import java.util.Scanner;
 public class EmployeeManager {
 	
 	public static void main(String args[]) throws Exception {
-		//Invalid input handling
-		String employeeID;
-		if(args[0] == null){ //If the user entered no arguements, ask them to.
-			Scanner userInputScanner = new Scanner(System.in);
-			System.out.print("Please enter an employee ID to perform a " + args[0] + " command: ");
-			employeeID = userInputScanner.nextLine();
-		}else{ //Otherwise if they did, throw the argument into an employeeID string.
-			employeeID = args[1]; 
-		}
+		//Invalid input handling	
+				Scanner userInputScanner = new Scanner(System.in);
+//				String command, employeeID = null;
+//				if(args[0] == null){
+//					System.out.print("You must enter a command (add,mod,del): ");
+//					command = userInputScanner.nextLine();
+//				}else{
+//					command = args[0];
+//				}
+//				
+//				if(command != "add"){
+//					if(args[1] == null){
+//						System.out.print("Please enter an employee ID to perform a " + args[0] + " command: ");
+//						employeeID = userInputScanner.nextLine();
+//					}else{
+//						employeeID = args[1]; 
+//					}
+//				}
+			
 	
 		switch (args[0].toLowerCase()) {
 		case "add":
 			add();
 			break;
 		case "del":
-			del(employeeID);
+			del(args[1]);
 			break;
 		case "mod":
-			mod(Integer.parseInt(employeeID));
+			mod(Integer.parseInt(args[1]));
 			break;
 		default:
 			System.out.print("The command you entered does not exist.");
@@ -154,14 +164,14 @@ public class EmployeeManager {
 	 * @throws IOException
 	 */
 	private static void del(String id) throws IOException {
-		File employeesFile = new File("employees.txt");
-		File tempEmployeesFile = new File("temp.txt");
+		File employeesFile = new File("resources/employees.txt");
+		File tempEmployeesFile = new File("resources/temp.txt");
 		Scanner fileScanner = new Scanner(employeesFile);
 		while (fileScanner.hasNextLine()) {
 		   String lineFromFile = fileScanner.nextLine();
 		   String[] delims = lineFromFile.split("	");
 		   String idInFile = delims[0];
-		   if(idInFile.contains(id)) {
+		   if(idInFile.equals(id)) {
 		       System.out.println("Removing" +id+delims[1]+delims[2]);
 			   continue;
 		   }
@@ -185,7 +195,7 @@ public class EmployeeManager {
 
 		// WRITE IT BACK TO THE .TXT FILE
 		try (PrintWriter out = new PrintWriter(new BufferedWriter(
-				new FileWriter("employees.txt", true)))) {
+				new FileWriter("resources/employees.txt", true)))) {
 			out.print("\n");
 			out.print(newEmployee.getId());
 			out.print("\t");
