@@ -10,13 +10,13 @@ package Program1;
 public class Employee {
 
 	private int id, /*zip,*/ taxID;
-	double salary, commission;
+	double salary/*, commission*/;
 	String firstName, lastName, department, title, per, street, city, state,
-			country, phone, zip;
+			country, phone, zip, commission;
 
 	public Employee(int id, String firstName, String lastName,
 			String department, String title, double salary, String per,
-			double commission, int taxID, String street, String city,
+			/*double commission*/ String commission, int taxID, String street, String city,
 			String state, /*int zip*/ String zip, String country, String phone) {
 
 		this.id = id;
@@ -110,14 +110,14 @@ public class Employee {
 	/**
 	 * @return the commission
 	 */
-	public double getCommission() {
+	public String getCommission() {
 		return commission;
 	}
 
 	/**
 	 * @param commission the commission to set
 	 */
-	public void setCommission(double commission) {
+	public void setCommission(String commission) {
 		this.commission = commission;
 	}
 

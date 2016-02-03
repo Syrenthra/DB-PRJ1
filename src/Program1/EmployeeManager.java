@@ -245,8 +245,9 @@ public class EmployeeManager {
 		System.out.println("Enter new per: ");
 		String per = scanner.nextLine();
 		System.out.println("Enter new commission: ");
-		double commission = scanner.nextDouble();
-		scanner.nextLine();
+//		double commission = scanner.nextDouble();
+//		scanner.nextLine();
+		String commission = scanner.nextLine();
 		System.out.println("Enter new taxID: ");
 		int taxID = scanner.nextInt();
 		scanner.nextLine();
