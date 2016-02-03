@@ -1,2 +1,0 @@
-Employee ID	Last Name	First Name	Department 	Title	Salary	Per	Commission	Tax ID	Street Address	City	State	Zip	Country	Phone
-521	Spencer	Martin	Accounting	Accounts Recievable Clerk	16	Hour		936147614	123 Middle Fox Private	 Hemp Ridge	 Maryland	 21723-7169	 US	 (443) 046-4337
