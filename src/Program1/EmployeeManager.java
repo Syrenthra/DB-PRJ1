@@ -14,15 +14,28 @@ import java.util.Scanner;
 public class EmployeeManager {
 	
 	public static void main(String args[]) throws Exception {
+		//Invalid input handling
+		String employeeID;
+		if(args[0] == null){ //If the user entered no arguements, ask them to.
+			Scanner userInputScanner = new Scanner(System.in);
+			System.out.print("Please enter an employee ID to perform a " + args[0] + " command: ");
+			employeeID = userInputScanner.nextLine();
+		}else{ //Otherwise if they did, throw the argument into an employeeID string.
+			employeeID = args[1]; 
+		}
+	
 		switch (args[0].toLowerCase()) {
 		case "add":
 			add();
 			break;
 		case "del":
-			del(args[1]);
+			del(employeeID);
 			break;
 		case "mod":
-			mod(Integer.parseInt(args[1]));
+			mod(Integer.parseInt(employeeID));
+			break;
+		default:
+			System.out.print("The command you entered does not exist.");
 			break;
 		}
 		//mod(1233);
@@ -170,7 +183,7 @@ public class EmployeeManager {
 		// INPUT EMPLOYEE INFO
 		Employee newEmployee = createNewEmployee();
 
-		// FILE WRITER
+		// WRITE IT BACK TO THE .TXT FILE
 		try (PrintWriter out = new PrintWriter(new BufferedWriter(
 				new FileWriter("employees.txt", true)))) {
 			out.print("\n");
@@ -244,8 +257,9 @@ public class EmployeeManager {
 		System.out.println("Enter new state");
 		String state = scanner.nextLine();
 		System.out.println("Enter new zip: ");
-		int zip = scanner.nextInt();
-		scanner.nextLine();
+		//int zip = scanner.nextInt();
+		//scanner.nextLine();
+		String zip = scanner.nextLine();
 		System.out.println("Enter new country: ");
 		String country = scanner.nextLine();
 		System.out.println("Enter new phone: ");

@@ -9,15 +9,15 @@ package Program1;
  */
 public class Employee {
 
-	private int id, zip, taxID;
+	private int id, /*zip,*/ taxID;
 	double salary, commission;
 	String firstName, lastName, department, title, per, street, city, state,
-			country, phone;
+			country, phone, zip;
 
 	public Employee(int id, String firstName, String lastName,
 			String department, String title, double salary, String per,
 			double commission, int taxID, String street, String city,
-			String state, int zip, String country, String phone) {
+			String state, /*int zip*/ String zip, String country, String phone) {
 
 		this.id = id;
 		this.firstName = firstName;
@@ -50,19 +50,34 @@ public class Employee {
 		this.id = id;
 	}
 
+//	/**
+//	 * @return the zip
+//	 */
+//	public int getZip() {
+//		return zip;
+//	}
+//
+//	/**
+//	 * @param zip the zip to set
+//	 */
+//	public void setZip(int zip) {
+//		this.zip = zip;
+//	}
+	
 	/**
 	 * @return the zip
 	 */
-	public int getZip() {
+	public String getZip() {
 		return zip;
 	}
 
 	/**
 	 * @param zip the zip to set
 	 */
-	public void setZip(int zip) {
+	public void setZip(String zip) {
 		this.zip = zip;
 	}
+
 
 	/**
 	 * @return the taxID
