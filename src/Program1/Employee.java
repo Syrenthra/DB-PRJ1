@@ -10,7 +10,7 @@ package Program1;
 public class Employee {
 
 	private int id, /*zip,*/ taxID;
-	double salary, commission;
+	double salary, commission, weekTotal, comAmt;
 	String firstName, lastName, department, title, per, street, city, state,
 			country, phone, zip;
 
@@ -34,6 +34,8 @@ public class Employee {
 		this.taxID = taxID;
 		this.title = title;
 		this.zip = zip;
+		this.weekTotal = 0;
+		this.comAmt = 0;
 	}
 
 	/**
@@ -259,6 +261,34 @@ public class Employee {
 	 */
 	public void setPhone(String phone) {
 		this.phone = phone;
+	}
+
+	/**
+	 * @return the weekTotal
+	 */
+	public double getWeekTotal() {
+		return weekTotal;
+	}
+
+	/**
+	 * @param weekTotal the weekTotal to set
+	 */
+	public void setWeekTotal(double weekTotal) {
+		this.weekTotal = weekTotal;
+	}
+
+	/**
+	 * @return the comAmt
+	 */
+	public double getComAmt() {
+		return comAmt;
+	}
+
+	/**
+	 * @param comAmt the comAmt to set
+	 */
+	public void setComAmt(double comAmt) {
+		this.comAmt = comAmt;
 	}
 
 }
