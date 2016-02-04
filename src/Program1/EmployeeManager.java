@@ -15,7 +15,7 @@ public class EmployeeManager {
 	
 	public static void main(String args[]) throws Exception {
 		//Invalid input handling	
-				Scanner userInputScanner = new Scanner(System.in);
+	//			Scanner userInputScanner = new Scanner(System.in);
 //				String command, employeeID = null;
 //				if(args[0] == null){
 //					System.out.print("You must enter a command (add,mod,del): ");

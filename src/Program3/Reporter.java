@@ -82,13 +82,13 @@ public class Reporter
         for(int i = 0; i < departmentEmployees.size(); i++){
             currentEm = departmentEmployees.get(i);
             totalTotal = currentEm.getComAmt()+currentEm.getWeekTotal();
-        
-         System.out.println("\t"+currentEm.getLastName()+","+currentEm.getFirstName()+"\t\t\t\t $\t"+df.format(currentEm.getWeekTotal())+"\t $"
-                  +currentEm.getComAmt()+"\t $ \t"+df.format(totalTotal));
+         System.out.printf("\t%-50s  $%13s  $%10s  $%10s\n",(currentEm.getLastName()+","+currentEm.getFirstName()),df.format(currentEm.getWeekTotal())
+                  ,df.format(currentEm.getComAmt()),df.format(totalTotal));
           totalPayroll = totalTotal + totalPayroll;
       }
-        System.out.println("\t   Total Payroll: "+df.format(totalPayroll));
+        System.out.println("\t   Total Payroll: $"+df.format(totalPayroll));
      }
+    
     
     private static void setDepartments(ArrayList<Employee> emp)
     {
