@@ -74,17 +74,21 @@ public class Reporter
         
     }
     
-    public static void printDepartment(String department, ArrayList<Employee> departmentEmployees){
+    public static void printDepartment(String department, ArrayList<Employee> departmentEmployees)
+    {
         Employee currentEm;
-        double totalTotal; //WEEKTOTAL + COMAMT
+        double totalTotal,totalPayroll=0; //WEEKTOTAL + COMAMT
         System.out.println("Department: "+department);
         for(int i = 0; i < departmentEmployees.size(); i++){
             currentEm = departmentEmployees.get(i);
-            totalTotal = currentEm.getComAmnt()+currentEm.getWeekTotal();
-            System.out.println("\t"+currentEm.getLastName()+","+currentEm.getFirstName()+"\t\t\t\t $\t"+currentEm.getWeekTotal()+"\t $"
-                    +currentEm.getComAmnt()+"\t $ \t"+Double.parseDouble(df.format(totalTotal)));
-        }
-    }
+            totalTotal = currentEm.getComAmt()+currentEm.getWeekTotal();
+        
+         System.out.println("\t"+currentEm.getLastName()+","+currentEm.getFirstName()+"\t\t\t\t $\t"+df.format(currentEm.getWeekTotal())+"\t $"
+                  +currentEm.getComAmt()+"\t $ \t"+df.format(totalTotal));
+          totalPayroll = totalTotal + totalPayroll;
+      }
+        System.out.println("\t   Total Payroll: "+df.format(totalPayroll));
+     }
     
     private static void setDepartments(ArrayList<Employee> emp)
     {
@@ -137,7 +141,7 @@ public class Reporter
                 
                 if(temp.getTitle().equals("Sales Manager")||temp.getTitle().equals("President"))
                 {
-                    temp.setComAmnt(Double.parseDouble(df.format(totalSales*(temp.getCommission()/100))));
+                    temp.setComAmt(Double.parseDouble(df.format(totalSales*(temp.getCommission()/100))));
                 }
                 
                 
@@ -210,7 +214,7 @@ public class Reporter
                    {
                        if(sales.get(j).getId().equals(searchID+""))
                        {
-                           temp.setComAmnt(Double.parseDouble(df.format(sales.get(j).getBase()*(temp.getCommission()/100))));
+                           temp.setComAmt(Double.parseDouble(df.format(sales.get(j).getBase()*(temp.getCommission()/100))));
                        }
                    }
                    set=false;
