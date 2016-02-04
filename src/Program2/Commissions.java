@@ -29,8 +29,8 @@ public class Commissions
     public static void main(String args[]) throws Exception 
     {
         totalSales=0;
-        String[] begin=args[0].split("/");
-        String[] end= args[1].split("/");
+        String[] begin=args[1].split("/");
+        String[] end= args[2].split("/");
         int startMon=Integer.parseInt(begin[0]);
         int endMon=Integer.parseInt(end[0]);
         int startDay=Integer.parseInt(begin[1]);
@@ -40,8 +40,12 @@ public class Commissions
         ArrayList<EmployeeSale> sales=gather(startMon,endMon,startDay,endDay);
         commission(sales);
         
-        System.out.println("Read "+count+" employees");
+        System.out.println("Read "+count+" employees" +totalSales);
 
+    }
+    public static double getTotal()
+    {
+        return totalSales;
     }
 
     private static void commission(ArrayList<EmployeeSale> sales) throws FileNotFoundException
@@ -104,7 +108,7 @@ public class Commissions
     }
         
 
-    private static ArrayList<EmployeeSale> gather(int startMon, int endMon, int startDay, int endDay) throws FileNotFoundException
+    public static ArrayList<EmployeeSale> gather(int startMon, int endMon, int startDay, int endDay) throws FileNotFoundException
     {
         //Creates the Scanner to read from sales
         File salesFile = new File("resources/sales.txt");
