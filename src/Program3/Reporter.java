@@ -39,6 +39,8 @@ public class Reporter
         int startDay=Integer.parseInt(begin[1]);
         int endDay=Integer.parseInt(end[1]);
         
+        int weeks=(int)Math.round(((endDay-startDay+0.0)/7));
+        
         acct.clear();
         admin.clear();
         hr.clear();
@@ -50,8 +52,8 @@ public class Reporter
         ArrayList<EmployeeSale> sale=Commissions.gather(startMon,endMon,startDay,endDay);
         totalSales=Commissions.totalSales;
         ArrayList<Employee>emp=readEmps();
-        emp=readHours(args[2],emp,sale);
-        emp=readAnnum(totalSales,emp);
+        emp=readHours(startDay,args[2],emp,sale);
+        emp=readAnnum(totalSales,emp,weeks);
         setDepartments(emp);
         printReport();
         
@@ -124,7 +126,7 @@ public class Reporter
         
     }
 
-    private static ArrayList<Employee> readAnnum( double totalSales, ArrayList<Employee> emp)
+    private static ArrayList<Employee> readAnnum( double totalSales, ArrayList<Employee> emp,int weeks)
     {
         ArrayList<Employee> annum=new ArrayList<Employee>();
         double bonus=0,base=0;
@@ -136,7 +138,7 @@ public class Reporter
             if(emp.get(i).getPer().toLowerCase().equals("annum"))
             {
                 
-                double k=Double.parseDouble(df.format(temp.getSalary()/52));
+                double k=Double.parseDouble(df.format((temp.getSalary()/52)*weeks));
                 temp.setWeekTotal(k);
                 
                 if(temp.getTitle().equals("Sales Manager")||temp.getTitle().equals("President"))
@@ -153,7 +155,7 @@ public class Reporter
     }
 
 
-    private static ArrayList<Employee> readHours(String date, ArrayList<Employee> emp, ArrayList<EmployeeSale> sales) throws FileNotFoundException, ParseException
+    private static ArrayList<Employee> readHours(int startDay, String date, ArrayList<Employee> emp, ArrayList<EmployeeSale> sales) throws FileNotFoundException, ParseException
     {
         boolean set=false;
         File hoursFile = new File("resources/hours.txt");
@@ -164,7 +166,10 @@ public class Reporter
         
         DecimalFormat df = new DecimalFormat("0.00");
         df.setRoundingMode(RoundingMode.CEILING);
-        while(fileScanner.hasNext()){
+        Employee temp = null;
+        
+        while(fileScanner.hasNext())
+        {
             String currentLine  = fileScanner.nextLine();
 
            String[] parsed=currentLine.split("\t");
@@ -174,54 +179,67 @@ public class Reporter
            if(parsed[0].length()>0)
            {
                searchID=Integer.parseInt(parsed[0]);
+               if(temp!=null)
+                   hourly.add(temp);
+               
+               for(int i=0;i<emp.size();i++)
+               {
+                   if(searchID==(emp.get(i).getId()))
+                   {
+                       temp=emp.remove(i);
+                       i=emp.size()+1;
+                   } 
+               } 
            }
+               
            DateFormat toFormat = new SimpleDateFormat("M/d");
            DateFormat fromFormat = new SimpleDateFormat("dd-MMM");
            Date fm = fromFormat.parse(parsed[1]);
            String formattedDate = toFormat.format(fm);
            //Sets the hours to what is on the current line
            
-           if(date.contains(formattedDate))
+           String[] lineDate=formattedDate.split("/");
+           String[] endDate= date.split("/");
+           int mon=Integer.parseInt(lineDate[0]);
+           int endMon=Integer.parseInt(endDate[0]);
+           int day=Integer.parseInt(lineDate[1]);
+           int endDay=Integer.parseInt(endDate[1]);
+           
+           if(mon==endMon &&(day<=endDay &&day>=startDay))
            {
                hours=Double.parseDouble(parsed[2]);
                set=true;
            }
            
            //Sets weekly amount
-           double base=0;
-           for(int i=0;i<emp.size();i++)
+           
+           if(set)
            {
-               base=0;
-               Employee temp=emp.get(i);
-               if(searchID==(emp.get(i).getId())&& set)
+               double base=0;
+               if(hours>40.0)
                {
-                   
-                  // System.out.println(temp.getSalary());
-                   if(hours>40.0)
-                   {
-                       base=(temp.getSalary()* 40) + (1.5*temp.getSalary())*(hours-40);
-                       base= Double.parseDouble(df.format(base));
-                   }
-                   else
-                   {
-                       base=temp.getSalary()*hours;
-                       base= Double.parseDouble(df.format(base));
-                   }
-                  // System.out.println(temp.getSalary());
-                   temp.setWeekTotal(base);
-                   //Sets the commission amount
-                   for(int j=0;j<sales.size();j++)
-                   {
-                       if(sales.get(j).getId().equals(searchID+""))
-                       {
-                           temp.setComAmt(Double.parseDouble(df.format(sales.get(j).getBase()*(temp.getCommission()/100))));
-                       }
-                   }
-                   set=false;
-               } 
-               hourly.add(temp);
-           }     
-       }
+                   base=(temp.getSalary()* 40) + (1.5*temp.getSalary())*(hours-40);
+                   base= Double.parseDouble(df.format(base));
+               }
+               else
+               {
+                   base=temp.getSalary()*hours;
+                   base= Double.parseDouble(df.format(base));
+               }
+               temp.setWeekTotal(base+temp.getWeekTotal());
+           }
+           //Sets the commission amount
+           for(int j=0;j<sales.size();j++)
+           {
+               if(sales.get(j).getId().equals(searchID+""))
+               {
+                   temp.setComAmt(Double.parseDouble(df.format(sales.get(j).getBase()*(temp.getCommission()/100))));
+               }
+           }
+           set=false;
+        } 
+        hourly.add(temp);
+        emp.addAll(hourly);
         fileScanner.close();       
         return emp;       
     }
